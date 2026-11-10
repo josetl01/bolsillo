@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="description" content="Bolsillo: tus cuentas, gastos, presupuestos, metas, deudas e inversiones en un solo sitio.">
+<meta name="theme-color" content="#0d1015">
+<meta name="color-scheme" content="dark light">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" type="image/png" href="iconos/icono-192.png">
+<link rel="apple-touch-icon" href="iconos/icono-180.png">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Bolsillo">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<style>:root{padding-top:env(safe-area-inset-top,0px)}body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);background:var(--bg);z-index:40}</style>
+<title>Bolsillo</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap">
+<link rel="stylesheet" href="css/estilos.css?v=20261111000557">
+
+</head>
+<body>
+<div class="app">
+  <aside class="lateral" id="lateral"></aside>
+  <main class="principal">
+    <div class="vista" id="vista"></div>
+  </main>
+</div>
+<nav class="barra-movil" id="barra-movil" aria-label="Secciones"></nav>
+<div class="avisos" id="avisos" aria-live="polite"></div>
+
+<script src="js/datos.js?v=20261111000557"></script>
+<script src="js/inversiones-datos.js?v=20261111000557"></script>
+<script src="js/ui.js?v=20261111000557"></script>
+<script src="js/graficos.js?v=20261111000557"></script>
+<script src="js/vistas.js?v=20261111000557"></script>
+<script src="js/informes.js?v=20261111000557"></script>
+<script src="js/inversiones.js?v=20261111000557"></script>
+<script src="js/formularios.js?v=20261111000557"></script>
+<script src="js/importar.js?v=20261111000557"></script>
+<script src="js/app.js?v=20261111000557"></script>
+
+<script>
+  if ('serviceWorker' in navigator && location.protocol === 'https:') {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  }
+</script>
+</body>
+</html>
