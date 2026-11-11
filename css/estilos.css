@@ -441,6 +441,40 @@ button.cat-fila:hover { background: var(--surface-2); }
   .cambio-bloque { align-items: flex-start; }
 }
 
+/* ---------- Sincronización y bloqueo ---------- */
+.estado-sync { margin-bottom: 8px; }
+.pasos a { color: var(--accent-strong); font-weight: 700; }
+html.con-bloqueo body { overflow: hidden; }
+.bloqueo {
+  position: fixed; inset: 0; z-index: 100; display: grid; place-items: center; overflow-y: auto;
+  padding: max(24px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(24px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+  background: radial-gradient(120% 80% at 50% 0%, var(--accent-soft), transparent 60%), var(--bg);
+  transition: opacity .2s;
+}
+.bloqueo.saliendo { opacity: 0; }
+.bloqueo-caja { width: min(320px, 100%); display: flex; flex-direction: column; align-items: center; gap: 12px; text-align: center; }
+.bloqueo-caja h1 { font-size: 24px; }
+.marca-logo.grande { width: 56px; height: 56px; border-radius: 17px; }
+.marca-logo.grande .ico { width: 30px; height: 30px; }
+.pin-puntos { display: flex; gap: 14px; margin: 10px 0 14px; }
+.pin-puntos i { width: 14px; height: 14px; border-radius: 999px; border: 2px solid var(--line-2); transition: background .12s, border-color .12s; }
+.pin-puntos i.lleno { background: var(--accent); border-color: var(--accent); }
+.pin-oculto { position: absolute; opacity: 0; width: 1px; height: 1px; pointer-events: none; }
+.teclado { display: grid; grid-template-columns: repeat(3, 72px); gap: 14px; justify-content: center; }
+.teclado button {
+  width: 72px; height: 72px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface);
+  font-family: var(--font-display); font-size: 26px; font-weight: 500; cursor: pointer; display: grid; place-items: center;
+  -webkit-tap-highlight-color: transparent; transition: background .1s;
+}
+.teclado button:active { background: var(--surface-2); }
+.teclado .tecla-sec { background: transparent; border-color: transparent; color: var(--muted); }
+.teclado .tecla-sec .ico { width: 26px; height: 26px; }
+.teclado .tecla-sec[hidden] { display: grid !important; visibility: hidden; }
+.temblor { animation: temblor .4s; }
+@keyframes temblor { 20%, 60% { transform: translateX(-9px); } 40%, 80% { transform: translateX(9px); } }
+.olvido { display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: var(--r); background: var(--surface); border: 1px solid var(--line); font-size: 13.5px; color: var(--muted); text-align: left; }
+#bl-olvido { margin-top: 8px; }
+
 /* ---------- Ajustes ---------- */
 .ajustes { display: flex; flex-direction: column; gap: 16px; max-width: 860px; }
 .ajuste { display: flex; align-items: center; justify-content: space-between; gap: 12px 24px; flex-wrap: wrap; padding: 14px 0; border-top: 1px solid var(--line); }

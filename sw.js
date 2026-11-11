@@ -1,5 +1,5 @@
-/* Bolsillo · service worker (versión 20261111000557) */
-const CACHE = 'bolsillo-20261111000557';
+/* Bolsillo · service worker (versión 20261111005707) */
+const CACHE = 'bolsillo-20261111005707';
 const ARCHIVOS = [
   './',
   'index.html',
@@ -7,17 +7,19 @@ const ARCHIVOS = [
   'iconos/icono-192.png',
   'iconos/icono-512.png',
   'iconos/icono-180.png',
-  'css/estilos.css?v=20261111000557',
-  'js/app.js?v=20261111000557',
-  'js/datos.js?v=20261111000557',
-  'js/formularios.js?v=20261111000557',
-  'js/graficos.js?v=20261111000557',
-  'js/importar.js?v=20261111000557',
-  'js/informes.js?v=20261111000557',
-  'js/inversiones-datos.js?v=20261111000557',
-  'js/inversiones.js?v=20261111000557',
-  'js/ui.js?v=20261111000557',
-  'js/vistas.js?v=20261111000557'
+  'css/estilos.css?v=20261111005707',
+  'js/app.js?v=20261111005707',
+  'js/bloqueo.js?v=20261111005707',
+  'js/datos.js?v=20261111005707',
+  'js/formularios.js?v=20261111005707',
+  'js/graficos.js?v=20261111005707',
+  'js/importar.js?v=20261111005707',
+  'js/informes.js?v=20261111005707',
+  'js/inversiones-datos.js?v=20261111005707',
+  'js/inversiones.js?v=20261111005707',
+  'js/sincronizar.js?v=20261111005707',
+  'js/ui.js?v=20261111005707',
+  'js/vistas.js?v=20261111005707'
 ];
 self.addEventListener('install', e => {
   e.waitUntil(caches.open(CACHE).then(c => c.addAll(ARCHIVOS)).then(() => self.skipWaiting()));

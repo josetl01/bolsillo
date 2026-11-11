@@ -4,7 +4,7 @@ window.B = window.B || {};
   'use strict';
 
   const CLAVE = 'bolsillo.v1';
-  B.VERSION = '0.3';
+  B.VERSION = '0.5';
 
   B.uid = () => Date.now().toString(36) + Math.random().toString(36).slice(2, 8);
   B.redondear = n => Math.round(n * 100) / 100;

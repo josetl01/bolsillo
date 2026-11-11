@@ -67,7 +67,8 @@
         ${item('deudas', 'deudas', 'Deudas y préstamos', 'Lo que debes y lo que te deben')}
         <button type="button" class="menu-item" data-accion="importar">${ico('importar')}<span><strong>Importar extracto</strong><small>CSV o Excel de tu banco</small></span></button>
         ${item('ruta', 'ruta', 'Hoja de ruta', 'Qué viene después')}
-        ${item('ajustes', 'ajustes', 'Ajustes', 'Moneda, tema, categorías y copias')}
+        ${item('ajustes', 'ajustes', 'Ajustes', 'Moneda, sincronización, PIN y copias')}
+        ${B.bloqueo?.cfg ? `<button type="button" class="menu-item" data-accion="bloquear-ya">${ico('candado')}<span><strong>Bloquear ahora</strong><small>Pide el PIN para volver a entrar</small></span></button>` : ''}
       </nav>`,
     });
   }
@@ -115,6 +116,16 @@
     'nueva-deuda': () => B.formDeuda(),
     'editar-deuda': el => B.formDeuda(id(el)),
     'pagar-deuda': el => B.pagoDeuda(id(el)),
+    'activar-sync': () => B.formSync(),
+    'sincronizar-ya': () => B.sincronizar({ silencioso: false }),
+    'desactivar-sync': async () => {
+      if (!await B.confirmar({ titulo: '¿Desactivar la sincronización aquí?', texto: 'Este dispositivo deja de sincronizar. Sus datos se quedan como están, y los de la nube y tus otros dispositivos no se tocan. Puedes volver a activarla cuando quieras con tu token y tu frase.', boton: 'Desactivar' })) return;
+      B.desactivarSync(); B.render(); B.aviso('Sincronización desactivada en este dispositivo');
+    },
+    'activar-pin': () => B.formPin(),
+    'cambiar-pin': () => B.formPin(),
+    'quitar-pin': () => B.formPin(true),
+    'bloquear-ya': () => { B.cerrarModal(); B.bloquear(); },
     'nueva-categoria': () => B.formCategoria(),
     'editar-categoria': el => B.formCategoria(id(el)),
     'borrar-regla': el => { B.borrarRegla(id(el)); B.render(); B.aviso('Regla borrada'); },
@@ -127,11 +138,15 @@
       location.hash = 'inicio'; B.render(); B.formCuenta();
     },
     'cargar-ejemplo': async () => {
+      if (B.sync?.cfg) { B.aviso('Desactiva antes la sincronización: si no, los datos de ejemplo llegarían a tus otros dispositivos'); return; }
       if (!await B.confirmar({ titulo: '¿Cargar datos de ejemplo?', texto: 'Sustituyen a los datos que tienes ahora. Si quieres conservarlos, haz antes una copia.', boton: 'Cargar ejemplo', peligro: true })) return;
       B.reiniciar('ejemplo'); B.ui.mes = B.mesActual(); B.render(); B.aviso('Datos de ejemplo cargados');
     },
     'borrar-todo': async () => {
-      if (!await B.confirmar({ titulo: '¿Borrar todos los datos?', texto: 'Se eliminan cuentas, movimientos, presupuestos y metas de este dispositivo. No se puede deshacer.', boton: 'Borrar todo', peligro: true })) return;
+      const conSync = !!B.sync?.cfg;
+      if (!await B.confirmar({ titulo: '¿Borrar todos los datos?', texto: conSync
+        ? 'Se eliminan cuentas, movimientos, presupuestos, metas e inversiones. Como la sincronización está activada, también se borrarán en tus otros dispositivos. Si solo quieres limpiar este, desactiva antes la sincronización. No se puede deshacer.'
+        : 'Se eliminan cuentas, movimientos, presupuestos, metas e inversiones de este dispositivo. No se puede deshacer.', boton: 'Borrar todo', peligro: true })) return;
       B.reiniciar('vacio'); B.ui.mes = B.mesActual(); location.hash = 'inicio'; B.render(); B.aviso('Datos borrados');
     },
   };
@@ -157,13 +172,28 @@
   };
   B.cargar();
   B.aplicarTema();
+  B.iniciarBloqueo();
   montarMarco();
   apuntarVencidos();
   B.render();
+
+  /* ---------- Sincronización ---------- */
+  B.alTraerDatos = () => {
+    B.aplicarTema();
+    apuntarVencidos();
+    if (!document.querySelector('.capa') && !(document.activeElement && /INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName))) B.render();
+  };
+  B.alCambiarSync(() => {
+    const c = document.getElementById('aj-sync-cuerpo');
+    if (c) c.innerHTML = B.tarjetaSync();
+  });
+  if (B.sync.cfg) setTimeout(() => B.sincronizar(), 800);
+  setInterval(() => { if (B.sync.cfg && document.visibilityState === 'visible') B.sincronizar(); }, 3 * 60e3);
   // Si la app se queda abierta (por ejemplo en el móvil) y cambia el día, apunta lo que toque al volver
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState !== 'visible') return;
     if (!document.querySelector('.capa') && apuntarVencidos()) B.render();
+    if (B.sync.cfg) B.sincronizar();
     if (B.estado.activos.length && Date.now() - B.precios.ultima > 30e3) B.actualizarPrecios();
   });
 

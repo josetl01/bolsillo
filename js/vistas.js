@@ -476,9 +476,19 @@
             }).join('')}</div>
           </section>
 
+          <section class="tarjeta" id="aj-sync">
+            <div class="tarjeta-cab"><h2>Sincronizar móvil y ordenador</h2></div>
+            <div id="aj-sync-cuerpo">${B.tarjetaSync ? B.tarjetaSync() : ''}</div>
+          </section>
+
+          <section class="tarjeta">
+            <div class="tarjeta-cab"><h2>Bloqueo con PIN</h2></div>
+            ${B.tarjetaBloqueo ? B.tarjetaBloqueo() : ''}
+          </section>
+
           <section class="tarjeta">
             <div class="tarjeta-cab"><h2>Tus datos</h2></div>
-            <p class="sub">Todo se guarda solo en este navegador y no se envía a ningún servidor. Haz una copia de vez en cuando; también te sirve para pasar tus datos del ordenador al móvil.</p>
+            <p class="sub">${B.sync?.cfg ? 'Tus datos se guardan en este navegador y, cifrados, en tu cuenta de GitHub para sincronizarlos. Aun así, una copia de vez en cuando nunca está de más.' : 'Todo se guarda solo en este navegador y no se envía a ningún servidor. Haz una copia de vez en cuando; también te sirve para pasar tus datos del ordenador al móvil.'}</p>
             <div class="botonera">
               <button type="button" class="boton" data-accion="exportar">${ico('exportar')}<span>Hacer copia</span></button>
               <button type="button" class="boton" data-accion="restaurar">${ico('importar')}<span>Restaurar copia</span></button>
@@ -494,6 +504,7 @@
         raiz.querySelectorAll('input[name=aj-tema]').forEach(r => r.addEventListener('change', () => {
           a.tema = r.value; B.guardar(); B.aplicarTema();
         }));
+        if (B.montarAjustesBloqueo) B.montarAjustesBloqueo(raiz);
         raiz.querySelector('#aj-tasa-auto').addEventListener('change', ev => {
           a.tasaAuto = ev.target.checked; B.guardar();
           raiz.querySelector('#aj-tasa').disabled = ev.target.checked;
@@ -522,7 +533,7 @@
     ['Fase 2 · Control', [['Presupuestos mensuales con avisos', 1], ['Importar el extracto del banco', 1], ['Movimientos recurrentes (alquiler, suscripciones)', 1]]],
     ['Fase 3 · Ahorro', [['Metas de ahorro', 1], ['Deudas y préstamos con plan de pago', 1]]],
     ['Fase 4 · Análisis', [['Informes por mes y por año', 1], ['Comparativas y tendencias', 1], ['Exportar a Excel', 1]]],
-    ['Fase 5 · Extras', [['Modo oscuro y claro', 1], ['Inversiones y rentabilidad', 1], ['Precios en vivo: cripto, bolsa y divisas', 1], ['Sincronizar móvil y ordenador', 0], ['Bloqueo con PIN', 0]]],
+    ['Fase 5 · Extras', [['Modo oscuro y claro', 1], ['Inversiones y rentabilidad', 1], ['Precios en vivo: cripto, bolsa y divisas', 1], ['Sincronizar móvil y ordenador (cifrado)', 1], ['Bloqueo con PIN y Face ID o huella', 1], ['App instalable en el móvil', 1]]],
   ];
   function ruta() {
     return {
